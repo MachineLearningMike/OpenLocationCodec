@@ -14,15 +14,15 @@ LON_MIN = 100.00000000
 LONGITUDE_MAX = 110.00000000
 
 # The number of letters in [lettersletters] - [digits][digits]
-LETTERS_LAT = 2
-LETTERS_LON = 2
+LETTERS_LAT = 1
+LETTERS_LON = 1
 
 # The number of digits in [lettersletters] - [digits][digits]
-DIGITS_LAT = 3
-DIGITS_LON = 3
+DIGITS_LAT = 4
+DIGITS_LON = 4
 
 # The number of decimals in lat/lon.  (13.21609568, 107.82591049)
-DECIMALS = 8
+DECIMALS = 6
 
 # The base to use to convert numbers to/from.
 ENC_BASE_LAT = len(LETTERS_LIST_LAT)
@@ -150,16 +150,17 @@ def encode_tude(tude, min, letter_resolution, digit_resolution, letters, digits,
 
         return (_letters, _digits)
 
-
-code = "[AANN] - [000] [000]"
+code = "[MP] - [0013] [5590]" #"[MDPM] - [00135] [05590]"
 print("code = ", code)
 
 latlon = decode(code)
 print("decode(code) = ", latlon)
 
-(lat, lon) = latlon
-code = encode(lat, lon)
-print("encode(decode(code)) = ", code)
+if latlon is not False:
+    (lat, lon) = latlon
 
-latlon = decode(code)
-print("decode(encode(decode(code))) = ", latlon)
+    code = encode(lat, lon)
+    print("encode(decode(code)) = ", code)
+
+    latlon = decode(code)
+    print("decode(encode(decode(code))) = ", latlon)
