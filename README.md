@@ -6,7 +6,7 @@ Requirements specified in 'requirements.md' file is implemented.
 - LaoPlus.py
 
     The source code is self-explained by its names of function and variable.
-    OOP grammar, like class, is not use deliberately, because the code is short and intuitive.
+    Architectural design and OOP grammatical tools, like class, is not use deliberately, because the code is short and intuitive.
 
 2. 3rd party library
 - openlocationcode.py, from https://github.com/google/open-location-code
