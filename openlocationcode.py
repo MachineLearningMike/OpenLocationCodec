@@ -76,10 +76,10 @@ CODE_ALPHABET_ = '23456789CFGHJMPQRVWX'
 ENCODING_BASE_ = len(CODE_ALPHABET_)
 
 # The maximum value for latitude in degrees.
-LATITUDE_MAX_ = 90
+LAT_MAX_ = 90
 
 # The maximum value for longitude in degrees.
-LONGITUDE_MAX_ = 180
+LON_MAX_ = 180
 
 # The max number of digits to process in a plus code.
 MAX_DIGIT_COUNT_ = 15
@@ -212,13 +212,13 @@ def isFull(code):
         return False
     # Work out what the first latitude character indicates for latitude.
     firstLatValue = CODE_ALPHABET_.find(code[0].upper()) * ENCODING_BASE_
-    if firstLatValue >= LATITUDE_MAX_ * 2:
+    if firstLatValue >= LAT_MAX_ * 2:
         # The code would decode to a latitude of >= 90 degrees.
         return False
     if len(code) > 1:
         # Work out what the first longitude character indicates for longitude.
         firstLngValue = CODE_ALPHABET_.find(code[1].upper()) * ENCODING_BASE_
-    if firstLngValue >= LONGITUDE_MAX_ * 2:
+    if firstLngValue >= LON_MAX_ * 2:
         # The code would decode to a longitude of >= 180 degrees.
         return False
     return True
@@ -263,8 +263,8 @@ def encode(latitude, longitude, codeLength=PAIR_CODE_LENGTH_):
     # Multiply values by their precision and convert to positive.
     # Force to integers so the division operations will have integer results.
     # Note: Python requires rounding before truncating to ensure precision!
-    latVal = int(round((latitude + LATITUDE_MAX_) * FINAL_LAT_PRECISION_, 6))
-    lngVal = int(round((longitude + LONGITUDE_MAX_) * FINAL_LNG_PRECISION_, 6))
+    latVal = int(round((latitude + LAT_MAX_) * FINAL_LAT_PRECISION_, 6))
+    lngVal = int(round((longitude + LON_MAX_) * FINAL_LNG_PRECISION_, 6))
 
     # Compute the grid part of the code if necessary.
     if codeLength > PAIR_CODE_LENGTH_:
@@ -319,8 +319,8 @@ def decode(code):
     code = code[:MAX_DIGIT_COUNT_]
     # Initialise the values for each section. We work them out as integers and
     # convert them to floats at the end.
-    normalLat = -LATITUDE_MAX_ * PAIR_PRECISION_
-    normalLng = -LONGITUDE_MAX_ * PAIR_PRECISION_
+    normalLat = -LAT_MAX_ * PAIR_PRECISION_
+    normalLng = -LON_MAX_ * PAIR_PRECISION_
     gridLat = 0
     gridLng = 0
     # How many digits do we have to process?
@@ -412,12 +412,12 @@ def recoverNearest(code, referenceLatitude, referenceLongitude):
     # than half the resolution, we need to move it north or south but keep it
     # within -90 to 90 degrees.
     if (referenceLatitude + halfResolution < codeArea.latitudeCenter and
-            codeArea.latitudeCenter - resolution >= -LATITUDE_MAX_):
+            codeArea.latitudeCenter - resolution >= -LAT_MAX_):
         # If the proposed code is more than half a cell north of the reference location,
         # it's too far, and the best match will be one cell south.
         codeArea.latitudeCenter -= resolution
     elif (referenceLatitude - halfResolution > codeArea.latitudeCenter and
-          codeArea.latitudeCenter + resolution <= LATITUDE_MAX_):
+          codeArea.latitudeCenter + resolution <= LAT_MAX_):
         # If the proposed code is more than half a cell south of the reference location,
         # it's too far, and the best match will be one cell north.
         codeArea.latitudeCenter += resolution
@@ -536,9 +536,9 @@ class CodeArea(object):
         self.longitudeHi = longitudeHi
         self.codeLength = codeLength
         self.latitudeCenter = min(latitudeLo + (latitudeHi - latitudeLo) / 2,
-                                  LATITUDE_MAX_)
+                                  LAT_MAX_)
         self.longitudeCenter = min(
-            longitudeLo + (longitudeHi - longitudeLo) / 2, LONGITUDE_MAX_)
+            longitudeLo + (longitudeHi - longitudeLo) / 2, LON_MAX_)
 
     def __repr__(self):
         return str([

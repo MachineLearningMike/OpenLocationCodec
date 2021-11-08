@@ -7,11 +7,11 @@ LETTERS_LIST_LON = 'NPRSUFGKMVWXYZABDE'
 
 # The maximum value for latitude in degrees.
 LAT_MIN = 13.00000000
-LATITUDE_MAX = 23.00000000
+LAT_MAX = 23.00000000
 
 # The maximum value for longitude in degrees.
 LON_MIN = 100.00000000
-LONGITUDE_MAX = 110.00000000
+LON_MAX = 110.00000000
 
 # The number of letters in [lettersletters] - [digits][digits]
 LETTERS_LAT = 1
@@ -29,8 +29,8 @@ ENC_BASE_LAT = len(LETTERS_LIST_LAT)
 ENC_BASE_LON = len(LETTERS_LIST_LON)
 
 # The geo-resolution gained by letters.
-LETTER_RES_LAT = (LATITUDE_MAX - LAT_MIN) / pow(ENC_BASE_LAT, LETTERS_LAT)
-LETTER_RES_LON = (LONGITUDE_MAX - LON_MIN) / pow(ENC_BASE_LON, LETTERS_LON)
+LETTER_RES_LAT = (LAT_MAX - LAT_MIN) / pow(ENC_BASE_LAT, LETTERS_LAT)
+LETTER_RES_LON = (LON_MAX - LON_MIN) / pow(ENC_BASE_LON, LETTERS_LON)
 
 # The geo-resolution gained by digits.
 DIGIT_RES_LAT = LETTER_RES_LAT / pow(10, DIGITS_LAT)
@@ -135,7 +135,12 @@ def lao_encode(latlon_string): # sample "16.88963889\100.86613889"
         if re.match(r'^-?\d+(?:\.\d+)$', inputlist[0]) is not None:
             if re.match(r'^-?\d+(?:\.\d+)$', inputlist[1]) is not None:
                 [lat, lon] = [float(inputlist[0]), float(inputlist[1])]
-                if lat < LAT_MIN or LATITUDE_MAX <= lat or lon < LON_MIN or LONGITUDE_MAX <= lon:
+
+                # Know-how
+                lat = mitigate_borders(lat, LAT_MIN, LAT_MAX, DIGIT_RES_LAT/10)
+                lon = mitigate_borders(lon, LON_MIN, LON_MAX, DIGIT_RES_LON/10)
+
+                if lat < LAT_MIN or LAT_MAX <= lat or lon < LON_MIN or LON_MAX <= lon:
                     ret = "Error: Latitude or longitude is out of Laos range: [13.0, 23.0) x [100.0, 110.0)"
                 else:
                     lat_letters, lon_letters, lat_digits, lon_digits = _encode(lat, lon)
@@ -148,6 +153,13 @@ def lao_encode(latlon_string): # sample "16.88963889\100.86613889"
         ret = "Error: Format is wrong."
 
     return ret
+
+def mitigate_borders(point, low_closed_border, high_open_border, tolerance):
+    if point < low_closed_border and point + tolerance >= low_closed_border:
+        point = point + tolerance
+    if point >= high_open_border and point - tolerance < high_open_border:
+        point = point - tolerance
+    return point
 
 def _encode(lat, lon):
     #lat += DIGIT_RES_LAT / 2 #----- Know-how 3
