@@ -18,3 +18,5 @@ Requirements specified in 'requirements.md' file is implemented.
 4. Demonstration video
 - bandicam 2021-11-09 02-13-51-890.mp4
 
+5. Architecture
+- 
