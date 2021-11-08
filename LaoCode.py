@@ -103,7 +103,10 @@ def lao_decode(code): # sample: "[MP] – [0013] [5590]"
                 ret = False
     
     if ret is True:
+        
+        # The core of the decoding function.
         lat, lon = _decode(letters_lat, digits_lat, letters_lon, digits_lon)
+
         lat = format(round(lat, DECIMALS), "." + str(DECIMALS) + "f")
         lon = format(round(lon, DECIMALS), "." + str(DECIMALS) + "f")
 
@@ -143,6 +146,7 @@ def lao_encode(latlon_string): # sample "16.88963889\100.86613889"
                 if lat < LAT_MIN or LAT_MAX <= lat or lon < LON_MIN or LON_MAX <= lon:
                     ret = "Error: Latitude or longitude is out of Laos range: [13.0, 23.0) x [100.0, 110.0)"
                 else:
+                    # The core of the encodeing funciton.
                     lat_letters, lon_letters, lat_digits, lon_digits = _encode(lat, lon)
                     ret = '[' + lat_letters + lon_letters + '] - [' + lat_digits + '] [' + lon_digits + ']'
             else:
