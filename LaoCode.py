@@ -2,8 +2,9 @@
 import math,re
 
 '''
-The lao geo-coding system encode/decode geographical corrdinates, comprising of latitude and longitute of a point on the Earch surface, 
-to/from alphanumeric code in the format of LETTERS - DIGITS1 - DIGITS2. (See the file 'requirement.md' for more.)
+The lao geo-coding system encode/decode geographical corrdinates, comprising of latitude and longitute 
+of a point on the Earch surface, to/from alphanumeric code in the format of LETTERS - DIGITS1 - DIGITS2. 
+(See the file 'requirement.md' for more.)
 LETTERS: a number of pre-defined alphanumeric symbols.
 DIGITS: a number of pre-defined digits.
 
@@ -60,19 +61,37 @@ DIGITS_LAT = 4
 DIGITS_LON = 4
 
 '''
-
+Latitude and longitude values produced by the lao geo-code system will have DECIMALS decimals.
+E.g.: 13.12345678 has 8 decimals.
+- It cannot be 0.
 '''
 DECIMALS = 8
 
-# The base to use to convert numbers to/from.
+'''
+Latitude value is enocded by letters with the base ENC_BASE_LAT, before it is further encoded by digits.
+Longitude value is enocded by letters with the base ENC_BASE_LON, before it is further encoded by digits.
+E.g. One more letter will encode latitude ENC_BASE_LAT times more precisely.
+E.g. 1 letter will divide the range into 18 tiles, and 2 letters will into 18 x 18 tiles, if the length of the set is 18.
+'''
 ENC_BASE_LAT = len(LETTERS_LIST_LAT)
 ENC_BASE_LON = len(LETTERS_LIST_LON)
 
-# The geo-resolution gained by letters.
+'''
+There are all pow(ENC_BASE_LAT, LETTERS_LAT) possible combinations of letters in the place of latitude letters.
+E.g. There are (18, 1) = 18 combinations in the place of latitude letters, 1st character, of [MP], if LETTRS_LAT == 1.
+E.g. There are (18, 2) combinations in the place of latitude letters, 1st and 3rd characters, of [MPAS], if LETTRS_LAT == 2.
+Each combination is responsible, or represents, LETTER_RES_LAT-wide latitude range.
+The whole range (LAT_MAX - LAT_MIN) is divided into pow(ENC_BASE_LAT, LETTERS_LAT) tiles, on latitudal axis.
+LETTER_RES_LON is to longitude what LETTER_RES_LAT is to latitude.
+'''
 LETTER_RES_LAT = (LAT_MAX - LAT_MIN) / pow(ENC_BASE_LAT, LETTERS_LAT)
 LETTER_RES_LON = (LON_MAX - LON_MIN) / pow(ENC_BASE_LON, LETTERS_LON)
 
-# The geo-resolution gained by digits.
+'''
+After the region is tiled, or divided, by letters, each of the tiles is further divided, or tiles, by digits.
+If there are 4 possible digits, then pow(10, 4) digit combinations will divide the tile into smaller tiles.
+Each combination is responsible and represents DIGIT_RES_LAT-wide latitude, and DIGIT_RES_LON-wide longitude.
+'''
 DIGIT_RES_LAT = LETTER_RES_LAT / pow(10, DIGITS_LAT)
 DIGIT_RES_LON = LETTER_RES_LON / pow(10, DIGITS_LON)
 
@@ -80,10 +99,18 @@ DIGIT_RES_LON = LETTER_RES_LON / pow(10, DIGITS_LON)
 print("MAX", DIGIT_RES_LAT, DIGIT_RES_LON)
 Go to this place: https://www.movable-type.co.uk/scripts/latlong.html
 Input (13.0, 110.0) and (13.0 + DIGIT_RES_LAT, 110.0 + DIGIT_RES_LON) to find the max error,
-
 '''
 
+'''
+lao_decode(code)
+- Decodes a lao geo-code to output a geo-coordinate point.
+- code: a lao geo-code.
+- The output is the geo-coordinates of the bottom-left point on the tile represented by the code.
+- If th
+'''
 def lao_decode(code): # sample: "[MP] – [0013] [5590]"
+
+
     ret = True
     letters_lat = letters_lon = digits_lat = digits_lon = None
 
