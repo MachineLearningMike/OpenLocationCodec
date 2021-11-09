@@ -1,5 +1,6 @@
 from LaoCode import lao_decode, lao_encode
 from LaoPlus import lao_to_plus, plus_to_lao
+import haversine as hs
 
 print("===================== Test lao_to_latlon and reverse =================")
 while True:
@@ -28,12 +29,16 @@ while True:
         print('t' + lao_string)
     else:
         print("\tlao_encode({}) = {}".format(latlon_string, lao_string))
-        latlon_string = lao_decode(lao_string)
-        if latlon_string is False:
+        latlon_string2 = lao_decode(lao_string)
+        if latlon_string2 is False:
             print("\tWrong format.")
         else:
-            print("\tlao_decode({}) = {}".format(lao_string, latlon_string))
-
+            print("\tlao_decode({}) = {}".format(lao_string, latlon_string2))
+        
+            strlist, strlist2 = latlon_string.split('/'), latlon_string2.split('/')
+            lat, lon, lat2, lon2 = float(strlist[0]), float(strlist[1]), float(strlist2[0]), float(strlist2[1])
+            error_meter = hs.haversine( (lat, lon), (lat2, lon2) )
+            print("Error_meter = ", error_meter)
 
 print("===================== Test lao_to_plus and reverse ==========================")
 while True:

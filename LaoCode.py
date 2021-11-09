@@ -7,7 +7,10 @@ to/from alphanumeric code in the format of LETTERS - DIGITS1 - DIGITS2. (See the
 LETTERS: a number of pre-defined alphanumeric symbols.
 DIGITS: a number of pre-defined digits.
 
-Letters in LETTERS and digits in DIGITS1 and DIGITS2, are used to name the squair tiles that divide the 2-dimensional coordinate system.
+e.g.: A lao geo-code 'MP-1234-5678' has 'MP' as LETTERS, '1234' as DIGITS1, and '5678' as DIGITS2.
+
+A lao geo-code Letters is used to name the squair tiles that divide the 2-dimensional coordinate system.
+Let's call it the Lao tile system.
 '''
 
 '''
@@ -23,24 +26,42 @@ LETTERS_LIST_LAT = 'ABDEFGKMNPRSUVWXYZ' # 'VWXYZFGKMNPRSUABDE'
 LETTERS_LIST_LON = 'NPRSUFGKMVWXYZABDE' # 'NPRSUFGKMVWXYZABDE'
 
 '''
-
+The latitude boundary and the longitude boundary of the square region that the lao geo-coding system will work on.
+A lao geo-code, this, represent a square tile that lies on this regeon.
+- LAT_MIN: The lower closed (inclusive) boundary of latitude.
+- LAT_MAX: The upper open (exclusive) boundary of latitude.
+- LON_MIN: The lower closed (inclusive) boundary of longitude.
+- LON_MAX: The upper open (exclusive) boundaty of longitufe.
+- Latitude ranges (-80, 90), while longitude ranges [-180, 180).
+- 80 here is a recommendation. You can choose 90.
 '''
 LAT_MIN = 13.00000000
 LAT_MAX = 23.00000000
 
-# The maximum value for longitude in degrees.
 LON_MIN = 100.00000000
 LON_MAX = 110.00000000
 
-# The number of letters in [lettersletters] - [digits][digits]
+'''
+The number of characters in latitude letters and longitude letters, respectively.
+If they are each set to 2, then a lao geo-code will looks like, for example, [MPSD] - ...
+- They can be set independently.
+- They cannot be zero.
+'''
 LETTERS_LAT = 1
 LETTERS_LON = 1
 
-# The number of digits in [lettersletters] - [digits][digits]
+'''
+The numbers of digits in DIGIST1 and DIGITS2, respectively.
+They are now set to 4, and the Lao geo-code should look like ...-[1234][5678]
+- They can be set independently.
+- They canot be zero.
+'''
 DIGITS_LAT = 4
 DIGITS_LON = 4
 
-# The number of decimals in lat/lon.  (13.21609568, 107.82591049)
+'''
+
+'''
 DECIMALS = 8
 
 # The base to use to convert numbers to/from.
@@ -55,6 +76,12 @@ LETTER_RES_LON = (LON_MAX - LON_MIN) / pow(ENC_BASE_LON, LETTERS_LON)
 DIGIT_RES_LAT = LETTER_RES_LAT / pow(10, DIGITS_LAT)
 DIGIT_RES_LON = LETTER_RES_LON / pow(10, DIGITS_LON)
 
+'''
+print("MAX", DIGIT_RES_LAT, DIGIT_RES_LON)
+Go to this place: https://www.movable-type.co.uk/scripts/latlong.html
+Input (13.0, 110.0) and (13.0 + DIGIT_RES_LAT, 110.0 + DIGIT_RES_LON) to find the max error,
+
+'''
 
 def lao_decode(code): # sample: "[MP] – [0013] [5590]"
     ret = True
