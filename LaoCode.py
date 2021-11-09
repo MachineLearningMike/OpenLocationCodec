@@ -1,11 +1,30 @@
 
 import math,re
 
-# The character set used to encode the values.
-LETTERS_LIST_LAT = 'ABDEFGKMNPRSUVWXYZ'
-LETTERS_LIST_LON = 'NPRSUFGKMVWXYZABDE'
+'''
+The lao geo-coding system encode/decode geographical corrdinates, comprising of latitude and longitute of a point on the Earch surface, 
+to/from alphanumeric code in the format of LETTERS - DIGITS1 - DIGITS2. (See the file 'requirement.md' for more.)
+LETTERS: a number of pre-defined alphanumeric symbols.
+DIGITS: a number of pre-defined digits.
 
-# The maximum value for latitude in degrees.
+Letters in LETTERS and digits in DIGITS1 and DIGITS2, are used to name the squair tiles that divide the 2-dimensional coordinate system.
+'''
+
+'''
+LETTERS is composed, or inter-woven, of two lists of letters: latitude letters and longitude leters.
+Below are defined the two ordered character sets for the latitude letters and longitude letters, respectively.
+Each character is important only in the meaning of its position in the set.
+- The length of the sets cannot be zero.
+- The length of the sets can different with each other.
+- A character cannot appear twice in a set.
+- The sets can have shared characters.
+'''
+LETTERS_LIST_LAT = 'ABDEFGKMNPRSUVWXYZ' # 'VWXYZFGKMNPRSUABDE'
+LETTERS_LIST_LON = 'NPRSUFGKMVWXYZABDE' # 'NPRSUFGKMVWXYZABDE'
+
+'''
+
+'''
 LAT_MIN = 13.00000000
 LAT_MAX = 23.00000000
 
