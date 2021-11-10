@@ -8,8 +8,8 @@ while True:
     if lao_string == 'q': break
 
     latlon_string = lao_decode(lao_string)
-    if latlon_string is False:
-        print("\tWrong format.")
+    if latlon_string.startswith('Error'):
+        print("\t" + latlon_string)
     else:
         # Call LaoCode.decode
         print("\tlao_decode({}) = {}".format(lao_string, latlon_string))
@@ -26,19 +26,19 @@ while True:
 
     lao_string = lao_encode(latlon_string)
     if lao_string.startswith("Error"):
-        print('t' + lao_string)
+        print('\t' + lao_string)
     else:
         print("\tlao_encode({}) = {}".format(latlon_string, lao_string))
         latlon_string2 = lao_decode(lao_string)
-        if latlon_string2 is False:
-            print("\tWrong format.")
+        if latlon_string2.startswith('Error'):
+            print("\t" + latlon_string2)
         else:
             print("\tlao_decode({}) = {}".format(lao_string, latlon_string2))
         
             strlist, strlist2 = latlon_string.split('/'), latlon_string2.split('/')
             lat, lon, lat2, lon2 = float(strlist[0]), float(strlist[1]), float(strlist2[0]), float(strlist2[1])
             error_meter = hs.haversine( (lat, lon), (lat2, lon2) )
-            print("Error_meter = ", error_meter)
+            print("\tError_meter = ", error_meter)
 
 print("===================== Test lao_to_plus and reverse ==========================")
 while True:
@@ -46,8 +46,8 @@ while True:
     if lao_string == 'q': break
 
     plus_string = lao_to_plus(lao_string)
-    if plus_string is False:
-        print("\tWrong format.")
+    if plus_string.startswith('Error'):
+        print("\t" + plus_string)
     else:
         print("\tlao_to_plus({}) = {}".format(lao_string, plus_string))
 
@@ -64,12 +64,16 @@ while True:
     plus_string = str(input("Enter a Plus code to convert into a Lao code, or 'q' to quit: "))
     if plus_string == 'q': break
 
-    (lao_string_lo, lao_string_hi) = plus_to_lao(plus_string)
-    plus_string_lo = lao_to_plus(lao_string_lo)
-    plus_string_hi = lao_to_plus(lao_string_hi)
-    print("\tplus_to_lao({}) = {}".format(plus_string, lao_string_lo + " to " + lao_string_hi))
-    print("\tlao_to_plus({}) = {}".format(lao_string_lo, lao_to_plus(lao_string_lo)))
-    print("\tlao_to_plus({}) = {}".format(lao_string_hi, lao_to_plus(lao_string_hi)))
+    lao_string = plus_to_lao(plus_string)
+    if isinstance(lao_string, str): # and lao_string.startswith('Error'):
+        print('\t' + lao_string)
+    else:
+        (lao_string_lo, lao_string_hi) = lao_string
+        plus_string_lo = lao_to_plus(lao_string_lo)
+        plus_string_hi = lao_to_plus(lao_string_hi)
+        print("\tplus_to_lao({}) = {}".format(plus_string, lao_string_lo + " to " + lao_string_hi))
+        print("\tlao_to_plus({}) = {}".format(lao_string_lo, lao_to_plus(lao_string_lo)))
+        print("\tlao_to_plus({}) = {}".format(lao_string_hi, lao_to_plus(lao_string_hi)))
 
 
 from openlocationcode import decode, encode

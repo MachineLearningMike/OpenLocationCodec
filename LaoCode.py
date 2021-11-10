@@ -109,61 +109,58 @@ lao_decode(code)
 - If th
 '''
 def lao_decode(code): # sample: "MP00135590"
-
-
-    ret = True
+    ret = ""
     letters_lat = letters_lon = digits_lat = digits_lon = None
 
     if len(code) != LETTERS_LAT + LETTERS_LON + DIGITS_LAT + DIGITS_LON:
-        ret = False
+        ret = 'Error: The length of lao code is wrong.'
     else:
         # extract latitude letters
-        if ret != False:
+        if not ret.startswith('Error'):
             start = 0; end = start + LETTERS_LAT
             letters_lat = code[start : end]
             for i in range(len(letters_lat)):
                 if LETTERS_LIST_LAT.find(letters_lat[i].upper()) < 0:
-                    ret = False
+                    ret = "Error: {}-th latitude letter is wrong.".format(i)
                     break
 
         # extract longitude letters
-        if ret != False:
+        if not ret.startswith('Error'):
             start = end; end = start + LETTERS_LON
             letters_lon = code[start : end]
             for i in range(len(letters_lon)):
                 if LETTERS_LIST_LON.find(letters_lon[i].upper()) < 0:
-                    ret = False
+                    ret = "Error: {}-th logitude letter is wrong.".format(i)
                     break
 
         # extract latitude digits
-        if ret != False:
+        if not ret.startswith('Error'):
             start = end; end = start + DIGITS_LAT
             digits_lat = code[start : end]
             for i in range(len(digits_lat)):
                 if not digits_lat[i].isnumeric():
-                    ret = False
+                    ret = "Error: {}-th latitude digit is wrong.".format(i)
                     break
 
         # extract longitude digits
-        if ret != False:
+        if not ret.startswith('Error'):
             start = end; end = start + DIGITS_LON
             digits_lon = code[start : end]
             for i in range(len(digits_lat)):
                 if not digits_lon[i].isnumeric():
-                    ret = False
+                    ret = "Error: {}-th longitude digit is wrong.".format(i)
                     break
     
-    if ret is True:
-        
+    if not ret.startswith('Error'):
         # The core of the decoding function.
         lat, lon = _decode(letters_lat, digits_lat, letters_lon, digits_lon)
 
         lat = format(round(lat, DECIMALS), "." + str(DECIMALS) + "f")
         lon = format(round(lon, DECIMALS), "." + str(DECIMALS) + "f")
 
-        return lat + '/' + lon
-    else:
-        return False
+        ret = lat + '/' + lon
+
+    return ret
 
 
 def _decode(letters_lat, digits_lat, letters_lon, digits_lon):
