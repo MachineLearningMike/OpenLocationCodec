@@ -108,7 +108,7 @@ lao_decode(code)
 - The output is the geo-coordinates of the bottom-left point on the tile represented by the code.
 - If th
 '''
-def lao_decode(code): # sample: "[MP] – [0013] [5590]"
+def lao_decode(code): # sample: "MP00135590"
 
 
     ret = True
@@ -199,7 +199,7 @@ def lao_encode(latlon_string): # sample "16.88963889\100.86613889"
                 else:
                     # The core of the encodeing funciton.
                     lat_letters, lon_letters, lat_digits, lon_digits = _encode(lat, lon)
-                    ret = '[' + lat_letters + lon_letters + '] - [' + lat_digits + '] [' + lon_digits + ']'
+                    ret = lat_letters + lon_letters + lat_digits + lon_digits
             else:
                 ret = "Error: Longitude is not a demical number."
         else:
