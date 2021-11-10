@@ -114,17 +114,12 @@ def lao_decode(code): # sample: "[MP] – [0013] [5590]"
     ret = True
     letters_lat = letters_lon = digits_lat = digits_lon = None
 
-    if len(code) != 1 + LETTERS_LAT + LETTERS_LON + 5 + DIGITS_LAT + 3 + DIGITS_LON + 1:
+    if len(code) != LETTERS_LAT + LETTERS_LON + DIGITS_LAT + DIGITS_LON:
         ret = False
     else:
-        # parse "["
-        start = 0; end = start + 1
-        if code[start : end] != '[':
-            ret = False
-
         # extract latitude letters
         if ret != False:
-            start = end; end = start + LETTERS_LAT
+            start = 0; end = start + LETTERS_LAT
             letters_lat = code[start : end]
             for i in range(len(letters_lat)):
                 if LETTERS_LIST_LAT.find(letters_lat[i].upper()) < 0:
@@ -140,11 +135,6 @@ def lao_decode(code): # sample: "[MP] – [0013] [5590]"
                     ret = False
                     break
 
-        # parse "] - ["
-        start = end; end = start + 5
-        if code[start : end] != '] - [':
-            ret = False
-
         # extract latitude digits
         if ret != False:
             start = end; end = start + DIGITS_LAT
@@ -154,12 +144,6 @@ def lao_decode(code): # sample: "[MP] – [0013] [5590]"
                     ret = False
                     break
 
-        # parse "] ["
-        if ret != False:
-            start = end; end = start + 3
-            if code[start : end] != '] [':
-                ret = False
-
         # extract longitude digits
         if ret != False:
             start = end; end = start + DIGITS_LON
@@ -168,12 +152,6 @@ def lao_decode(code): # sample: "[MP] – [0013] [5590]"
                 if not digits_lon[i].isnumeric():
                     ret = False
                     break
-
-        # parse "]"
-        if ret != False:
-            start = end; end = start + 1
-            if code[start : end] != ']':
-                ret = False
     
     if ret is True:
         
